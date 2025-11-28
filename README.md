@@ -1,32 +1,66 @@
-Bajaj Health Datathon - AI Bill Extraction Pipeline
-📖 Project Overview
-This solution is an automated pipeline designed to extract structured line-item data from complex medical invoices. It solves the challenge of extracting messy, unstructured visual data into a clean JSON format while strictly avoiding double-counting and ensuring mathematical accuracy through a reconciliation layer.
+# 📖 Bajaj Health Datathon – AI Bill Extraction Pipeline
 
-🚀 Key Features
-Multimodal AI Extraction: Uses Google Gemini 1.5 Pro to visually analyze document layout, ensuring columns (Rate, Quantity, Amount) are correctly identified even in distorted images.
-Double-Counting Prevention: Advanced prompt engineering explicitly filters out summary rows (e.g., "Subtotal", "Tax", "Grand Total") to capture only transaction line items.
-Mathematical Reconciliation: The API does not simply read the total from the page. Instead, it recalculates the sum of all extracted line items (reconciled_amount). This provides a validation layer—if the AI's math matches the bill's total, confidence is high.
-Robust Error Handling: Automatic fallback logic handles API timeouts or model availability issues.
-🛠️ Tech Stack
-Language: Python 3.9+
-Framework: FastAPI (High-performance, async)
-Server: Uvicorn
-AI Engine: Google Gemini 1.5 Pro (via google-generativeai SDK)
-Deployment: Render (Cloud Hosting)
-🔗 Live API Endpoint
-The solution is deployed and live. You can test it using the endpoint below:
+## 🧩 Project Overview
+This project implements an **automated AI-powered pipeline** that extracts **structured line-item data** from complex medical invoices.  
+It converts messy, unstructured visual data into **clean JSON outputs** while ensuring:
 
-Base URL: https://<YOUR-RENDER-APP-NAME>.onrender.com Method: POST Endpoint: /extract-bill-data
+- Zero double-counting  
+- Column-wise accuracy  
+- Mathematical consistency through reconciliation
 
-📝 API Documentation
-Request Format
-Send a POST request with the URL of the bill image.
+---
 
+## 🚀 Key Features
+
+### 🔍 **Multimodal AI Extraction**
+- Uses **Google Gemini 1.5 Pro** to analyze bill layouts.
+- Correctly detects columns like **Rate, Quantity, Amount** even in distorted or blurry images.
+
+### ➗ **Double-Counting Prevention**
+- Smart prompt engineering filters out summary rows:  
+  **Subtotal, Discount, Tax, Grand Total**, etc.
+
+### ✔️ **Mathematical Reconciliation**
+- The pipeline **recalculates** the final amount instead of trusting the printed total.
+- Returns `reconciled_amount` (sum of all extracted line items).
+
+### 🛡️ **Robust Error Handling**
+- Automatic fallback logic for API timeouts or model unavailability.
+
+---
+
+## 🛠️ Tech Stack
+
+| Component | Technology |
+|----------|------------|
+| **Language** | Python 3.9+ |
+| **Framework** | FastAPI |
+| **Server** | Uvicorn |
+| **AI Engine** | Google Gemini 1.5 Pro |
+| **Deployment** | Render Cloud Hosting |
+
+---
+
+## 🔗 Live API Endpoint
+
+The API is deployed and live.
+
+Base URL: https://gaurav-kumawat-mnit.vercel.app/
+Method: POST
+Endpoint: /extract-bill-data
+
+
+---
+
+## 📝 API Documentation
+
+### 📤 **Request Format**
+Send a POST request with the bill image URL:
+
+```json
 {
-  "document": "[https://hackrx.blob.core.windows.net/assets/datathon-IIT/sample_2.png](https://hackrx.blob.core.windows.net/assets/datathon-IIT/sample_2.png)?..."
+  "document": "https://hackrx.blob.core.windows.net/assets/datathon-IIT/sample_2.png?..."
 }
-Response Format
-The API returns a structured JSON matching the Datathon schema.
 
 {
   "is_success": true,
@@ -48,33 +82,50 @@ The API returns a structured JSON matching the Datathon schema.
     "reconciled_amount": 448.0
   }
 }
-reconciled_amount: This is the calculated sum of all extracted item_amount fields. It serves as a ground-truth check for the extraction accuracy.
-💻 Local Setup & Installation
-If you wish to run this pipeline locally, follow these steps:
+```
 
-1. Clone the Repository
-git clone <your-repo-link>
-cd <folder-name>
-2. Install Dependencies
+reconciled_amount = Sum of all extracted item amounts.
+
+---
+
+## 💻 Local Setup & Installation
+# 1️⃣ Clone the Repository
+
+``` bash
+git clone https://github.com/Gauravkumawat2908/gauravKumawat_MNIT
+```
+---
+
+# 2️⃣ Install Dependencies
+
+```bash
 pip install -r requirements.txt
-3. Configure Environment
-Create a .env file in the root directory and add your Google Gemini API key:
+```
+---
 
+# 3️⃣ Configure Your Environment
+
+Create a .env file:
+
+``` ini
 GEMINI_API_KEY=AIzaSy...YourKeyHere
-4. Run the Server
-python main.py
-The server will start at http://0.0.0.0:8000.
+```
+# 4️⃣ Run the Server
 
-📂 Project Structure
-├── main.py              # The core FastAPI application & AI logic
-├── requirements.txt     # Python dependencies
-├── render.yaml          # Configuration for Cloud Deployment
-├── test_api.py          # Script to test the API locally
-├── test_cloud.py        # Script to test the deployed API
-├── .env                 # API Keys (Not uploaded to GitHub)
-└── README.md            # Documentation
-✅ Evaluation Criteria Checklist
-[x] Accuracy: High-precision extraction using the "Pro" vision model.
-[x] Reconciliation: Implemented Python-side summation logic.
-[x] Double-Counting: Filtered via strict System Prompt instructions.
-[x] Deployment: Successfully hosted on Render with a public endpoint.
+```bash
+python main.py
+```
+# 📂 Project Structure
+
+``` bash
+
+├── main.py            # FastAPI application + AI extraction logic
+├── requirements.txt   # Python dependencies
+├── render.yaml        # Render cloud deployment config
+├── test_api.py        # Local API testing
+├── test_cloud.py      # Tests for deployed endpoint
+├── .env               # Env variables (ignored in Git)
+└── README.md          # Documentation
+```
+
+
