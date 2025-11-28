@@ -20,6 +20,11 @@ genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 app = FastAPI(title="Bajaj Health Datathon - Bill Extractor")
 
+# --- ADD THIS NEW ROUTE ---
+@app.get("/")
+def home():
+    return {"message": "Bajaj Health API is Live!", "status": "Running"}
+# ---------------------------
 # --- Pydantic Models for Input/Output ---
 
 class DocumentRequest(BaseModel):
@@ -169,4 +174,5 @@ async def extract_bill_data(request: DocumentRequest):
         return APIResponse(is_success=False, error=str(e))
 
 if __name__ == "__main__":
+
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
